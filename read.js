@@ -2,7 +2,11 @@
 
 let gameOver = false;
 let buttonList = matrix(9, 9);
+let StartGame;
 function calculateButton(row, col) {
+    if (!StartGame) {
+        StartGame = Date.now();
+    }
     if (gameOver) {
         const mesaj = confirm('Do you want to restart?');
         if (!mesaj) {
@@ -15,14 +19,14 @@ function calculateButton(row, col) {
     buttonList[row][col].classList.add('buttonClicked');
     if (buttonList[row][col].innerHTML === '!') {
         buttonList[row][col].classList.add('background');
+        let EndGame = Date.now();
+        let timer = ((EndGame - StartGame) / 1000).toFixed(2);
         setTimeout(() => {
-            alert('game over');
-        }, 1000);
+            alert('game over in ' + timer + " seconds");
+        }, 1);
         showBombs();
         gameOver = true;
-
     }
-
     if (buttonList[row][col].innerHTML) {
         return;
     }
@@ -52,6 +56,7 @@ function calculateButton(row, col) {
         }
     }
 }
+
 function showBombs() {
     for (let i = 0; i < buttonList.length; i++) {
         for (let j = 0; j < buttonList[i].length; j++) {
@@ -77,7 +82,12 @@ function verifyIfWin() {
     }
 
     if (!hasEmptyCell) {
-        alert('You won! Congratulation! :)');
+        let wonGame = Date.now();
+        let winTimer = ((wonGame - StartGame) / 1000).toFixed(2);
+        setTimeout(() => {
+            alert('You won!Congratulation! :)' + winTimer + 'seconds');
+        }, 1);
+
         gameOver = true;
     }
 }
@@ -86,6 +96,7 @@ function reset() {
     const table = document.querySelector('.board');
     table.innerHTML = '';
     gameOver = false;
+    StartGame=false;
     buttonList = matrix(buttonList.length, buttonList[0].length);
 }
 
